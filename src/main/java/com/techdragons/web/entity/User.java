@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -41,7 +42,8 @@ public class User implements UserDetails {
 
 
     private String password;
-
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Collection<Role> roles;
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
 
@@ -73,7 +75,11 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getName().name()));
+        }
+        return authorities;
     }
 
     @Override

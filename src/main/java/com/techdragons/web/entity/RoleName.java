@@ -1,4 +1,6 @@
 package com.techdragons.web.entity;
 
-public class RoleName {
+public enum RoleName {
+    ROLE_STUDENT,
+    ROLE_TEACHER
 }

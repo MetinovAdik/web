@@ -28,7 +28,7 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/", "/api/v1/auth/register", "/api/v1/auth/authenticate").permitAll()
-                        .requestMatchers("/hello").hasAuthority("ROLE_USER") // Используйте hasAuthority с префиксом ROLE_
+                        .requestMatchers("/hello").hasAuthority("ROLE_STUDENT") // Используйте hasAuthority с префиксом ROLE_
                         // или .hasRole("USER") если вы не хотите указывать префикс ROLE_ явно
                         .anyRequest().authenticated()
                 )

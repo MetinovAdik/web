@@ -1,7 +1,10 @@
 package com.techdragons.web.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techdragons.web.config.JwtService;
+import com.techdragons.web.entity.Role;
+import com.techdragons.web.entity.RoleName;
 import com.techdragons.web.entity.User;
+import com.techdragons.web.repository.RoleRepository;
 import com.techdragons.web.repository.UserRepository;
 import com.techdragons.web.security.Token;
 import com.techdragons.web.security.TokenRepository;
@@ -18,6 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Collections;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -26,14 +31,18 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final RoleRepository roleRepository;
     private final CustomUserDetailsService customUserDetailsService; // Используйте CustomUserDetailsService
 
     public AuthenticationResponse register(RegisterRequest request) {
+        Role role = roleRepository.findByName(RoleName.valueOf(request.getRole()))
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
         var user = User.builder()
                 .firstName(request.getFirstname())
                 .lastName(request.getLastname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .roles(Collections.singleton(role))
                 .build();
         var savedUser = repository.save(user);
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(user.getEmail()); // Загрузите UserDetails
