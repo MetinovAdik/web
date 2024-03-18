@@ -20,15 +20,21 @@ public class LessonController {
         this.lessonService = lessonService;
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<LessonDTO> addLesson(@RequestBody LessonDTO lessonDTO) {
-        // Implementation to add a new lesson to a course
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        // Assuming you have a method in your service to handle this:
+        LessonDTO savedLessonDTO = lessonService.createAndAddLessonToCourse(lessonDTO);
+
+        // Assuming createAndAddLessonToCourse returns a LessonDTO
+        return new ResponseEntity<>(savedLessonDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/course/{courseId}")
     public ResponseEntity<List<LessonDTO>> getLessonsByCourse(@PathVariable Long courseId) {
-        // Implementation to get all lessons for a specific course
-        return ResponseEntity.ok().build();
+        // Use the service to get a list of Lesson entities by courseId
+        List<LessonDTO> lessonsDTO = lessonService.getAllLessonsOfCourse(courseId);
+
+        // Assuming getAllLessonsOfCourse returns a List<LessonDTO>
+        return ResponseEntity.ok(lessonsDTO);
     }
 }

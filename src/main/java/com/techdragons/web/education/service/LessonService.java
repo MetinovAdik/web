@@ -41,24 +41,25 @@ public class LessonService {
         lesson.setDescriptionTwo(lessonDTO.getDescriptionTwo());
         lesson.setExercise(lessonDTO.getExercise());
         lesson.setExerciseAnswer(lessonDTO.getExerciseAnswer());
+
+        // Find the course and set it
         Course course = courseRepository.findById(lessonDTO.getCourseId())
-                .orElseThrow(() -> new RuntimeException("Course not found"));
+                .orElseThrow(() -> new RuntimeException("Course not found with ID: " + lessonDTO.getCourseId()));
         lesson.setCourse(course);
-        Lesson savedLesson = lessonRepository.save(lesson);
-        return convertToDTO(savedLesson);
+
+        // Save the lesson
+        lesson = lessonRepository.save(lesson);
+
+        // Convert to DTO and return
+        return convertToDTO(lesson);
     }
+
     public List<LessonDTO> getAllLessonsOfCourse(Long courseId) {
         List<Lesson> lessons = lessonRepository.findByCourseId(courseId);
         return lessons.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
-    public LessonDTO convertToDTO(Lesson lesson) {
-        LessonDTO dto = new LessonDTO();
-        dto.setTitle(lesson.getTitle());
-        dto.setDescriptionOne(lesson.getDescriptionOne());
-        dto.setDescriptionTwo(lesson.getDescriptionTwo());
-        dto.setExercise(lesson.getExercise());
-        dto.setExerciseAnswer(lesson.getExerciseAnswer());
-        dto.setCourseId(lesson.getCourse().getId());
-        return dto;
+
+    private LessonDTO convertToDTO(Lesson lesson) {
+        return new LessonDTO(lesson.getTitle(), lesson.getDescriptionOne(), lesson.getDescriptionTwo(), lesson.getExercise(), lesson.getExerciseAnswer(), lesson.getCourse().getId());
     }
 }

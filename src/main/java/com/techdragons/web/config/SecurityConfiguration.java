@@ -29,7 +29,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/", "/api/v1/auth/register", "/api/v1/auth/authenticate").permitAll()
                         .requestMatchers("/dialogs/chat").hasAuthority("ROLE_STUDENT")
-                        .requestMatchers("/api/courses/create").hasAuthority("ROLE_TEACHER")
+                        .requestMatchers("/api/courses/create", "/api/courses/all" , "/api/lessons/add","/api/lessons/course/{courseId}").hasAuthority("ROLE_TEACHER")
                         .anyRequest().authenticated()
                 )
                 .httpBasic().disable()

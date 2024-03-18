@@ -49,7 +49,7 @@ public class CourseController {
     public ResponseEntity<List<CourseDTO>> getAllCourses() {
         List<Course> courses = courseService.findAllCourses();
 
-        // Convert to DTOs, including teacherId
+
         List<CourseDTO> courseDTOs = courses.stream()
                 .map(course -> new CourseDTO(course.getId(), course.getTitle(), course.getDescription()))
                 .collect(Collectors.toList());
@@ -57,5 +57,5 @@ public class CourseController {
         return ResponseEntity.ok(courseDTOs);
     }
 
-    // Additional endpoints as needed...
+    
 }
