@@ -1,7 +1,10 @@
 package com.techdragons.web.config;
 
+import com.techdragons.web.artificial.OpenaiService;
 import com.techdragons.web.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import okhttp3.OkHttpClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +16,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.Duration;
+
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
@@ -23,7 +28,14 @@ public class ApplicationConfig {
         return username -> repository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
-
+    @Bean
+    public OkHttpClient okHttpClient() {
+        return new OkHttpClient.Builder()
+                .connectTimeout(Duration.ofSeconds(60)) // 30 seconds in milliseconds
+                .readTimeout(Duration.ofSeconds(60))    // 30 seconds in milliseconds
+                .writeTimeout(Duration.ofSeconds(60))   // 30 seconds in milliseconds
+                .build();
+    }
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
