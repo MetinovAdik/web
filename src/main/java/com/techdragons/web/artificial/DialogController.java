@@ -12,9 +12,7 @@ public class DialogController {
 
     @PostMapping("/chat")
     public MessageResponseDTO chat(@RequestBody MessageRequestDTO request) {
-        // Обрабатываем сообщение пользователя
         String reply = dialogService.handleMessage(request.getMessage(), request.getStudentId(), Sender.USER);
-        // Возвращаем ответ
         return new MessageResponseDTO(reply);
     }
 }

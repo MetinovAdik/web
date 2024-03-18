@@ -1,10 +1,8 @@
 package com.techdragons.web.config;
 
-import com.techdragons.web.artificial.OpenaiService;
 import com.techdragons.web.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import okhttp3.OkHttpClient;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
