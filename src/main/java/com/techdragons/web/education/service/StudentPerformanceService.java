@@ -28,6 +28,4 @@ public class StudentPerformanceService {
     public StudentPerformance savePerformance(StudentPerformance studentPerformance) {
         return studentPerformanceRepository.save(studentPerformance);
     }
-
-    // Additional methods for calculating grades, tracking progress, etc.
 }

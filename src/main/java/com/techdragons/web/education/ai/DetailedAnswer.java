@@ -1,4 +1,4 @@
-package com.techdragons.web.artificial;
+package com.techdragons.web.education.ai;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,19 +7,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
+@Table(name = "detailed_answers")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Setter
-public class Message {
+@Getter
+public class DetailedAnswer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(columnDefinition = "TEXT")
-    private String message;
+
     @ManyToOne
-    @JoinColumn(name = "dialog_id")
-    private Dialog dialog;
-    private Sender sender;
+    @JoinColumn(name = "test_result_id", nullable = false)
+    private TestResult testResult;
+
+    private String theme;
+    private Boolean correct;
+    private String courseTitle;
 }

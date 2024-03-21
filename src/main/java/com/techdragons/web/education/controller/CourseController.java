@@ -33,6 +33,7 @@ public class CourseController {
         Course course = new Course();
         course.setTitle(courseDTO.getTitle());
         course.setDescription(courseDTO.getDescription());
+        course.setThemes(courseDTO.getThemes());
         Optional<User> user =  userRepository.findByEmail(userDetails.getUsername());
         course.setTeacherId(user.get().getId()); // Assuming Course has a teacherId field
 
@@ -40,7 +41,7 @@ public class CourseController {
         Course savedCourse = courseService.saveCourse(course);
 
         // Convert back to DTO
-        CourseDTO savedCourseDTO = new CourseDTO(savedCourse.getId(), savedCourse.getTitle(), savedCourse.getDescription());
+        CourseDTO savedCourseDTO = new CourseDTO(savedCourse.getId(), savedCourse.getTitle(), savedCourse.getDescription(),savedCourse.getThemes());
 
         return new ResponseEntity<>(savedCourseDTO, HttpStatus.CREATED);
     }
@@ -51,7 +52,7 @@ public class CourseController {
 
 
         List<CourseDTO> courseDTOs = courses.stream()
-                .map(course -> new CourseDTO(course.getId(), course.getTitle(), course.getDescription()))
+                .map(course -> new CourseDTO(course.getId(), course.getTitle(), course.getDescription(),course.getThemes()))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(courseDTOs);
