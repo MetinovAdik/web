@@ -27,7 +27,7 @@ public class SecurityConfiguration {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/api/v1/auth/register", "/api/v1/auth/authenticate").permitAll()
+                        .requestMatchers("/", "/api/v1/auth/register", "/api/v1/auth/authenticate","/api/v1/auth/refresh-token").permitAll()
                         .requestMatchers("/dialogs/chat","/api/enrollments/enroll/{courseId}").hasAuthority("ROLE_STUDENT")
                         .requestMatchers("/api/courses/create", "/api/courses/all" , "/api/lessons/add","/api/lessons/course/{courseId}").hasAuthority("ROLE_TEACHER")
                         .anyRequest().authenticated()
