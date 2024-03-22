@@ -1,10 +1,12 @@
 package com.techdragons.web.education.ai.service;
 
+import com.techdragons.web.artificial.MistralService;
 import com.techdragons.web.artificial.OpenaiService;
 import com.techdragons.web.education.ai.AITest;
 import com.techdragons.web.education.ai.Question;
 import com.techdragons.web.education.ai.repository.AITestRepository;
 import com.techdragons.web.education.ai.repository.QuestionRepository;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class TestGenerationService {
@@ -21,9 +24,11 @@ public class TestGenerationService {
 
     @Autowired
     private AITestRepository aiTestRepository;
-
+    @Autowired
+    private MistralService mistralService;
     @Autowired
     private QuestionRepository questionRepository;
+
 
     public AITest generateTestForCourse(Long courseId, String courseTitle, List<String> themes) throws IOException {
         AITest aiTest = new AITest();
@@ -66,6 +71,26 @@ public class TestGenerationService {
 
     private String generateQuestionForTheme(String theme) throws IOException {
         String prompt = "Create a question for the theme: " + theme;
-        return openaiService.sendMessage(prompt, "Please generate a question based on the given theme and format it like this <Question: question text. CorrectAnswer: correct answer text>.");
+        CompletableFuture<String> futureResponse = mistralService.sendAndReceiveMessageAsync(prompt+"Please generate a question based on the given theme and format it like this <Question: question text. CorrectAnswer: correct answer text>.");
+        String jsonResponse = futureResponse.join(); // This will wait for the future to complete
+
+        // Process the JSON response as needed
+        String reply =parseResponses(jsonResponse);
+        return reply;
+    }
+    private String parseResponses(String jsonResponse) {
+        StringBuilder fullResponse = new StringBuilder();
+        String[] lines = jsonResponse.split("\n");
+
+        for (String line : lines) {
+            if (line.trim().isEmpty()) continue; // Skip empty lines
+
+            JSONObject jsonObject = new JSONObject(line);
+            if (!jsonObject.optBoolean("done", true)) { // Only append if not done
+                fullResponse.append(jsonObject.optString("response", ""));
+            }
+        }
+
+        return fullResponse.toString();
     }
 }

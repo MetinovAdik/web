@@ -29,6 +29,4 @@ public class AITestService {
     public List<AITest> getAllTests() {
         return aiTestRepository.findAll();
     }
-
-    // Additional methods as needed...
 }

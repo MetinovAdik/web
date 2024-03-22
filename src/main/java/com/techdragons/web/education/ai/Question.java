@@ -24,10 +24,10 @@ public class Question {
 
     private String theme;
 
-    @Column(length = 1000)
+    @Column(columnDefinition = "TEXT")
     private String question;
 
-    @Column(name = "correct_answer")
+    @Column(name = "correct_answer",columnDefinition = "TEXT")
     private String correctAnswer;
 
 }
