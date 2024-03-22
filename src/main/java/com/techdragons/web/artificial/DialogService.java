@@ -1,8 +1,8 @@
 package com.techdragons.web.artificial;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
 public class DialogService {
 
     @Autowired
-    private MistralService mistralService; // Change to use MistralService
+    private MistralService mistralService;
     @Autowired
     private DialogRepository dialogRepository;
 
@@ -27,10 +27,10 @@ public class DialogService {
 
         // Wait for the CompletableFuture to complete and get the response
         CompletableFuture<String> futureResponse = mistralService.sendAndReceiveMessageAsync(context.trim() + "\n" + messageText);
-        String fullResponse = futureResponse.join(); // This will wait for the future to complete
+        String jsonResponse = futureResponse.join(); // This will wait for the future to complete
 
-        // Process the response as needed
-        String reply = fullResponse;
+        // Process the JSON response as needed
+        String reply =parseResponses(jsonResponse);
 
         // Add the current user message and system response to the dialog
         dialog.addNewMessage(messageText, Sender.USER);
@@ -42,4 +42,20 @@ public class DialogService {
         return reply;
     }
 
+    private String parseResponses(String jsonResponse) {
+        StringBuilder fullResponse = new StringBuilder();
+        String[] lines = jsonResponse.split("\n");
+
+        for (String line : lines) {
+            if (line.trim().isEmpty()) continue; // Skip empty lines
+
+            JSONObject jsonObject = new JSONObject(line);
+            if (!jsonObject.optBoolean("done", true)) { // Only append if not done
+                fullResponse.append(jsonObject.optString("response", ""));
+            }
+        }
+
+        return fullResponse.toString();
+    }
 }
+
