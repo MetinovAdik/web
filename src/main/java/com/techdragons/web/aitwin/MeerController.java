@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MeerController {
 
-    @GetMapping("/check")
+    @GetMapping("/api/v1/auth/check")
     public boolean check() {
         return true;
     }
