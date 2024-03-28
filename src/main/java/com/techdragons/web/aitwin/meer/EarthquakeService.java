@@ -3,6 +3,7 @@ package com.techdragons.web.aitwin.meer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -23,11 +24,10 @@ public class EarthquakeService {
     }
 
     private boolean checkForEarthquake(Earthquake earthquake) {
-        // This method should contain the logic to check the database for multiple reports in the same area within a short time frame
-        List<Earthquake> recentReports = earthquakeRepository.findRecentReports(earthquake.getLatitude(), earthquake.getLongitude());
+        Timestamp fiveMinutesAgo = new Timestamp(System.currentTimeMillis() - 300000); // 300,000 milliseconds = 5 minutes
+        List<Earthquake> recentReports = earthquakeRepository.findRecentReports(earthquake.getLatitude(), earthquake.getLongitude(), fiveMinutesAgo);
 
         // Determine if an earthquake is happening based on the recent reports
-        // This is a placeholder for your logic
-        return recentReports.size() > 10;
+        return recentReports.size() > 10; // This is just an example threshold
     }
 }
