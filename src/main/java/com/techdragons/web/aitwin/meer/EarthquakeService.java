@@ -38,6 +38,6 @@ public class EarthquakeService {
         long uniqueDeviceCount = reportsByDevice.keySet().size();
 
         // Determine if an earthquake is happening based on the unique reports
-        return uniqueDeviceCount > 10; // This is just an example threshold
+        return uniqueDeviceCount >= 2; // This is just an example threshold
     }
 }
