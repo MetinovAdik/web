@@ -27,17 +27,27 @@ public class EarthquakeService {
     }
 
     private boolean checkForEarthquake(Earthquake earthquake) {
+        // Определение временного интервала
         Timestamp fiveMinutesAgo = new Timestamp(System.currentTimeMillis() - 300000); // 300,000 milliseconds = 5 minutes
-        List<Earthquake> recentReports = earthquakeRepository.findRecentReports(earthquake.getLatitude(), earthquake.getLongitude(), fiveMinutesAgo);
 
-        // Группируем по deviceId, чтобы учитывать только уникальные сигналы от каждого устройства
+        // Определение географического "отступа"
+        double errorMargin = 0.01; // примерный "отступ" в градусах
+        double minLatitude = earthquake.getLatitude() - errorMargin;
+        double maxLatitude = earthquake.getLatitude() + errorMargin;
+        double minLongitude = earthquake.getLongitude() - errorMargin;
+        double maxLongitude = earthquake.getLongitude() + errorMargin;
+
+        // Изменённый вызов репозитория
+        List<Earthquake> recentReports = earthquakeRepository.findRecentReports(minLatitude, maxLatitude, minLongitude, maxLongitude, fiveMinutesAgo);
+
+        // Группировка отчётов по deviceId для учёта уникальности
         Map<String, List<Earthquake>> reportsByDevice = recentReports.stream()
                 .collect(Collectors.groupingBy(Earthquake::getDeviceId));
 
-        // Считаем количество уникальных устройств, отправивших сигнал
+        // Подсчёт количества уникальных устройств
         long uniqueDeviceCount = reportsByDevice.keySet().size();
 
-        // Determine if an earthquake is happening based on the unique reports
-        return uniqueDeviceCount >= 2; // This is just an example threshold
+        // Определение, происходит ли землетрясение, на основе количества уникальных отчётов
+        return uniqueDeviceCount >= 2; // Примерный порог для демонстрации
     }
 }
