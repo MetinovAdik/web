@@ -1,7 +1,7 @@
 package com.techdragons.web.education.service;
 
 import com.techdragons.web.education.Course;
-import com.techdragons.web.education.repository.CourseRepository;
+import com.techdragons.web.education.service.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

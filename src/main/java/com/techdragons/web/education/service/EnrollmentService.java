@@ -1,11 +1,11 @@
 package com.techdragons.web.education.service;
 
 import com.techdragons.web.education.Enrollment;
-import com.techdragons.web.education.ai.PersonalizedCourse;
-import com.techdragons.web.education.ai.service.PersonalizedCourseService;
-import com.techdragons.web.education.ai.service.TestGenerationService;
-import com.techdragons.web.education.repository.CourseRepository;
-import com.techdragons.web.education.repository.EnrollmentRepository;
+import com.techdragons.web.education.individ.PersonalizedCourse;
+import com.techdragons.web.education.individ.service.PersonalizedCourseService;
+import com.techdragons.web.education.individ.service.TestGenerationService;
+import com.techdragons.web.education.service.repository.CourseRepository;
+import com.techdragons.web.education.service.repository.EnrollmentRepository;
 import com.techdragons.web.entity.User;
 import com.techdragons.web.repository.UserRepository;
 import org.springframework.stereotype.Service;

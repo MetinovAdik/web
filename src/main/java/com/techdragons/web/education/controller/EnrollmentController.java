@@ -1,7 +1,7 @@
 package com.techdragons.web.education.controller;
 
 import com.techdragons.web.education.Enrollment;
-import com.techdragons.web.education.ai.service.PersonalizedCourseService;
+import com.techdragons.web.education.individ.service.PersonalizedCourseService;
 import com.techdragons.web.education.service.EnrollmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

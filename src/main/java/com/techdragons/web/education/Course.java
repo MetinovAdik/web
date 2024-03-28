@@ -22,6 +22,4 @@ public class Course {
     private String description;
     private List<String> themes;
     private Long teacherId;
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Lesson> lessons = new ArrayList<>();
 }
